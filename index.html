@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Портал Команди Lifecell</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #ffffff;
+    }
+
+    header {
+      background-color: #005bac;
+      padding: 15px 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      padding: 0 10px;
+    }
+
+    nav a {
+      background-color: #ffcc00;
+      color: #003366;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+
+    nav a:hover {
+      background-color: #ffd633;
+    }
+
+    main {
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #005bac;
+      font-size: 32px;
+    }
+
+    p {
+      font-size: 18px;
+      color: #333;
+    }
+
+    @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      nav a {
+        width: 90%;
+        text-align: center;
+        font-size: 16px;
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      p {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="novachkam.html">Інформація для новачків</a>
+      <a href="posylannya.html">Корисні посилання</a>
+      <a href="pokaznyky.html">Показники команди</a>
+      <a href="pobazhannya.html">Побажання по змінам</a>
+      <a href="tekhnichni.html">Технічні труднощі</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Ласкаво просимо на внутрішній портал команди Lifecell!</h1>
+    <p>Оберіть розділ у верхньому меню для перегляду відповідної інформації.</p>
+  </main>
+</body>
+</html>
