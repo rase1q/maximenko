@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Пожелания по сменам</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e6f2ff;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #009fe3;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      color: #333;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #009fe3;
+      color: white;
+      padding: 12px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 6px;
+      width: 100%;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #007bbd;
+    }
+    .success {
+      text-align: center;
+      color: green;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Форма пожеланий по сменам</h2>
+    <form id="wishForm">
+      <label for="fullname">Имя и фамилия (например: Maksym AMaksymenko):</label>
+      <input type="text" id="fullname" name="fullname" required>
+
+      <label for="week">Номер недели:</label>
+      <select id="week" name="week" required>
+        <option value="">-- Выберите неделю --</option>
+        <!-- Автоматически сгенерируем от 1 до 99 -->
+        <script>
+          for (let i = 1; i <= 99; i++) {
+            document.write(`<option value="${i}">${i}</option>`);
+          }
+        </script>
+      </select>
+
+      <label for="shift">Желаемые смены:</label>
+      <select id="shift" name="shift" required>
+        <option value="">-- Выберите смену --</option>
+        <option value="Утро">Утро</option>
+        <option value="День">День</option>
+        <option value="Вечер">Вечер</option>
+        <option value="Ночь">Ночь</option>
+        <option value="Гибкий график">Гибкий график</option>
+      </select>
+
+      <label for="reason">Причина пожеланий:</label>
+      <textarea id="reason" name="reason" rows="4" required></textarea>
+
+      <button type="submit">Отправить</button>
+      <div class="success" id="successMessage" style="display: none;">Успешно отправлено!</div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('wishForm');
+    const successMessage = document.getElementById('successMessage');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const data = {
+        fullname: document.getElementById('fullname').value,
+        week: document.getElementById('week').value,
+        shift: document.getElementById('shift').value,
+        reason: document.getElementById('reason').value
+      };
+
+      fetch("https://script.google.com/macros/s/AKfycbxm-LIza7gKo7gMWRhvLEXokErKgVUSTs97J2LlGM1uC9yud2f5QpfKN7UEpsvNdA5r/exec", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(response => {
+        if (response.status === "success") {
+          successMessage.style.display = "block";
+          form.reset();
+        }
+      })
+      .catch(error => {
+        alert("Ошибка при отправке. Повторите попытку позже.");
+        console.error("Ошибка:", error);
+      });
+    });
+  </script>
+</body>
+</html>
