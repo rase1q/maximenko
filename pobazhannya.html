@@ -2,37 +2,83 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <title>Побажання по змінах</title>
+  <title>Форма побажань по змінах</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    select, input, textarea, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+  </style>
 </head>
 <body>
-  <h2>Збір побажань по змінах</h2>
-  <form action="https://script.google.com/macros/s/AKfycbxm-LIza7gKo7gMWRhvLEXokErKgVUSTs97J2LlGM1uC9yud2f5QpfKN7UEpsvNdA5r/exec" method="POST" target="_blank">
-    
-    <label for="fullname">👤 Ім’я та прізвище (наприклад: Maksym AMaksymenko):</label><br>
-    <input type="text" name="fullname" id="fullname" required><br><br>
+  <h2>Форма побажань по змінах</h2>
+  <form id="wishForm">
+    <label>Ваше ім’я та прізвище (наприклад, Maksym AMaksymenko):
+      <input type="text" name="fullname" required>
+    </label>
 
-    <label for="week">📅 Оберіть номер тижня:</label><br>
-    <select name="week" id="week">
-      <!-- Генеруємо список від 1 до 99 -->
-      <script>
-        for (let i = 1; i <= 99; i++) {
-          document.write(`<option value="${i}">${i}</option>`);
-        }
-      </script>
-    </select><br><br>
+    <label>Номер тижня:
+      <select name="week" required>
+        <option value="">Оберіть тиждень</option>
+        <!-- Генеруємо 1-99 -->
+        <script>
+          for (let i = 1; i <= 99; i++) {
+            document.write(`<option value="${i}">${i}</option>`);
+          }
+        </script>
+      </select>
+    </label>
 
-    <label for="shift">🕒 Оберіть зміну:</label><br>
-    <select name="shift" id="shift">
-      <option value="Ранкова">Ранкова</option>
-      <option value="Денна">Денна</option>
-      <option value="Вечірня">Вечірня</option>
-      <option value="Нічна">Нічна</option>
-    </select><br><br>
+    <label>Бажані зміни:
+      <select name="shift" required>
+        <option value="">Оберіть зміну</option>
+        <option value="Ранкова">Ранкова</option>
+        <option value="Денна">Денна</option>
+        <option value="Вечірня">Вечірня</option>
+        <option value="Нічна">Нічна</option>
+      </select>
+    </label>
 
-    <label for="reason">📝 Причина побажання:</label><br>
-    <textarea name="reason" id="reason" rows="4" cols="50"></textarea><br><br>
+    <label>Причина побажань:
+      <textarea name="reason" rows="4"></textarea>
+    </label>
 
-    <button type="submit">✅ Надіслати побажання</button>
+    <button type="submit">Надіслати</button>
   </form>
+
+  <p id="responseMsg"></p>
+
+  <script>
+    const form = document.getElementById("wishForm");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch("https://script.google.com/macros/s/AKfycbx10_E6YJK4ySxv-NBKT2mG7uCIXVEz0qgnj8fjFy7tujkCZATcneSB4DSNisKzdCqw/exec", {
+          method: "POST",
+          body: formData,
+        });
+
+        const text = await response.text();
+        document.getElementById("responseMsg").innerText = text || "Дані надіслано успішно.";
+        form.reset();
+      } catch (error) {
+        document.getElementById("responseMsg").innerText = "Помилка під час надсилання. Спробуйте пізніше.";
+        console.error("Error:", error);
+      }
+    });
+  </script>
 </body>
 </html>
