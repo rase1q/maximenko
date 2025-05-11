@@ -3,67 +3,142 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Форма пожеланий</title>
+  <title>Форма пожеланий по сменам</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .form-container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      color: #333;
+    }
+    label {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 10px;
+      display: block;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .form-footer {
+      text-align: center;
+      font-size: 14px;
+      color: #888;
+    }
+    .form-footer a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-  <h2>Форма пожеланий по сменам</h2>
 
-  <form id="wishForm">
-    <label for="fullname">Ваше имя и фамилия:</label>
-    <input type="text" id="fullname" name="fullname" required><br><br>
+  <div class="form-container">
+    <h1>Форма пожеланий по сменам</h1>
+    <form id="wishForm">
+      <label for="name">Ваше имя и фамилия:</label>
+      <input type="text" id="name" name="name" placeholder="Maksym AMaksymenko" required>
 
-    <label for="week">Номер недели:</label>
-    <select id="week" name="week" required>
-      <option value="">Выберите номер недели</option>
-      <!-- Список недель от 1 до 99 -->
-      <script>
-        for (let i = 1; i <= 99; i++) {
-          document.write('<option value="'+ i +'">'+ i +'</option>');
-        }
-      </script>
-    </select><br><br>
+      <label for="week">Номер недели:</label>
+      <select id="week" name="week" required>
+        <option value="">Выберите номер недели</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <!-- Добавь дополнительные недели по мере необходимости -->
+        <option value="99">99</option>
+      </select>
 
-    <label for="shift">Выберите смену:</label>
-    <select id="shift" name="shift" required>
-      <option value="">Выберите смену</option>
-      <option value="День">День</option>
-      <option value="Ночь">Ночь</option>
-    </select><br><br>
+      <label for="shift">Выберите смену:</label>
+      <select id="shift" name="shift" required>
+        <option value="">Выберите смену</option>
+        <option value="День">День</option>
+        <option value="Вечер">Вечер</option>
+        <option value="Ночь">Ночь</option>
+      </select>
 
-    <label for="reason">Причина пожелания:</label><br>
-    <textarea id="reason" name="reason" rows="4" cols="50" required></textarea><br><br>
+      <label for="reason">Причина пожелания:</label>
+      <textarea id="reason" name="reason" rows="4" placeholder="Опишите вашу причину..." required></textarea>
 
-    <button type="submit">Отправить</button>
-  </form>
+      <button type="submit">Отправить</button>
+    </form>
+
+    <div id="responseMessage" style="display: none; text-align: center; margin-top: 20px; color: #4CAF50;">
+      Спасибо! Ваше пожелание отправлено.
+    </div>
+
+    <div class="form-footer">
+      <p>Если у вас возникли проблемы с отправкой формы, <a href="mailto:support@example.com">свяжитесь с нами</a>.</p>
+    </div>
+  </div>
 
   <script>
     document.getElementById('wishForm').addEventListener('submit', function(event) {
-      event.preventDefault(); // Отменяем стандартную отправку формы
+      event.preventDefault();
 
-      const fullname = document.getElementById('fullname').value;
+      const name = document.getElementById('name').value;
       const week = document.getElementById('week').value;
       const shift = document.getElementById('shift').value;
       const reason = document.getElementById('reason').value;
 
-      const formData = new FormData();
-      formData.append('fullname', fullname);
-      formData.append('week', week);
-      formData.append('shift', shift);
-      formData.append('reason', reason);
+      const formData = {
+        'name': name,
+        'week': week,
+        'shift': shift,
+        'reason': reason
+      };
 
-      fetch('https://script.google.com/macros/s/AKfycby2cYb0fKXZ_FkGLYTpK67QklQ2RHDSlEr-PVm0gpBpYBb8XHAWbuTeuBiIr3R_ti01/exec', {
+      fetch('https://script.google.com/macros/s/AKfycby0CuAV1sDGkzBq2j9DPxJaqgejvSQwGZPmtS1PQa__FQA6MxwvK5uurIc5V8ytBgk/exec', {
         method: 'POST',
-        body: formData
+        body: new URLSearchParams(formData),
       })
-      .then(response => response.text())
+      .then(response => response.json())
       .then(data => {
-        alert('Пожелание успешно отправлено!');
+        document.getElementById('responseMessage').style.display = 'block';
+        document.getElementById('wishForm').reset(); // Очистить форму после отправки
       })
       .catch(error => {
         console.error('Ошибка:', error);
-        alert('Произошла ошибка. Попробуйте снова.');
+        alert('Произошла ошибка. Пожалуйста, попробуйте еще раз.');
       });
     });
   </script>
+
 </body>
 </html>
