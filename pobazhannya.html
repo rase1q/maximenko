@@ -1,55 +1,56 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Форма</title>
+    <title>Збір побажань</title>
 </head>
 <body>
-    <h2>Форма обратной связи</h2>
-    <form id="contactForm">
-        <label for="name">Ваше имя:</label>
+    <h1>Збір побажань щодо змін</h1>
+    <form id="feedbackForm">
+        <label for="name">Ваше ім'я:</label><br>
         <input type="text" id="name" name="name" required><br><br>
 
-        <label for="email">Ваш email:</label>
+        <label for="email">Ваша електронна пошта:</label><br>
         <input type="email" id="email" name="email" required><br><br>
 
-        <label for="message">Сообщение:</label><br>
-        <textarea id="message" name="message" rows="4" cols="50" required></textarea><br><br>
+        <label for="feedback">Ваше побажання:</label><br>
+        <textarea id="feedback" name="feedback" rows="4" cols="50" required></textarea><br><br>
 
-        <button type="submit">Отправить</button>
+        <button type="submit">Надіслати</button>
     </form>
 
+    <p id="responseMessage"></p>
+
     <script>
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        document.getElementById("feedbackForm").addEventListener("submit", function(event) {
+            event.preventDefault();
 
-            const formData = new FormData(this);
+            // Отримуємо дані з форми
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const feedback = document.getElementById("feedback").value;
 
-            // Создаем объект с данными формы
-            const data = {
-                name: formData.get('name'),
-                email: formData.get('email'),
-                message: formData.get('message')
-            };
+            // Формуємо об'єкт даних для відправки
+            const formData = new FormData();
+            formData.append("name", name);
+            formData.append("email", email);
+            formData.append("feedback", feedback);
 
-            // Отправляем запрос
-            fetch('https://script.google.com/macros/s/AKfycbx7FDEdhsVJWRYfd_09wW12JOnHskJEqm1zvXoMWUb9CW0_uvDn4ovM9cW-JH4SVjsJ/exec', {
+            // Відправляємо дані до Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbynNY66THjME2o3oL25bR6FURbQ-ck0LQTIBisPDcj2Z1b3CTTSsd3gKqrsGT576_AH/exec', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*' // Добавляем заголовок для CORS
-                },
-                body: JSON.stringify(data) // Преобразуем данные в JSON
+                body: formData
             })
-            .then(response => response.json()) // Преобразуем ответ в JSON
+            .then(response => response.text())
             .then(data => {
-                alert('Сообщение отправлено!');
-                console.log('Success:', data);
+                // Виводимо повідомлення про успішну відправку
+                document.getElementById("responseMessage").textContent = "Ваше побажання надіслано!";
             })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('Произошла ошибка при отправке сообщения.');
+            .catch(error => {
+                // Обробка помилок
+                document.getElementById("responseMessage").textContent = "Помилка при відправці побажання. Спробуйте ще раз.";
+                console.error("Error:", error);
             });
         });
     </script>
