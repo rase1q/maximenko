@@ -1,144 +1,130 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Форма пожеланий по сменам</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .form-container {
-      background-color: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 500px;
-    }
-    h1 {
-      text-align: center;
-      font-size: 24px;
-      color: #333;
-    }
-    label {
-      font-size: 16px;
-      color: #333;
-      margin-bottom: 10px;
-      display: block;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    .form-footer {
-      text-align: center;
-      font-size: 14px;
-      color: #888;
-    }
-    .form-footer a {
-      color: #4CAF50;
-      text-decoration: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма Отправки</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input, textarea {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success {
+            color: green;
+            font-size: 14px;
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="form-container">
-    <h1>Форма пожеланий по сменам</h1>
-    <form id="wishForm">
-      <label for="name">Ваше имя и фамилия:</label>
-      <input type="text" id="name" name="name" placeholder="Maksym AMaksymenko" required>
+<div class="container">
+    <h1>Форма Отправки</h1>
+    <form id="contactForm">
+        <label for="name">Ваше имя:</label>
+        <input type="text" id="name" name="name" required>
 
-      <label for="week">Номер недели:</label>
-      <select id="week" name="week" required>
-        <option value="">Выберите номер недели</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <!-- Добавь дополнительные недели по мере необходимости -->
-        <option value="99">99</option>
-      </select>
+        <label for="email">Ваш email:</label>
+        <input type="email" id="email" name="email" required>
 
-      <label for="shift">Выберите смену:</label>
-      <select id="shift" name="shift" required>
-        <option value="">Выберите смену</option>
-        <option value="День">День</option>
-        <option value="Вечер">Вечер</option>
-        <option value="Ночь">Ночь</option>
-      </select>
+        <label for="message">Сообщение:</label>
+        <textarea id="message" name="message" rows="4" required></textarea>
 
-      <label for="reason">Причина пожелания:</label>
-      <textarea id="reason" name="reason" rows="4" placeholder="Опишите вашу причину..." required></textarea>
-
-      <button type="submit">Отправить</button>
+        <button type="submit">Отправить</button>
     </form>
 
-    <div id="responseMessage" style="display: none; text-align: center; margin-top: 20px; color: #4CAF50;">
-      Спасибо! Ваше пожелание отправлено.
-    </div>
+    <div class="error" id="errorMessage">Ошибка при отправке формы. Пожалуйста, попробуйте позже.</div>
+    <div class="success" id="successMessage">Форма успешно отправлена!</div>
+</div>
 
-    <div class="form-footer">
-      <p>Если у вас возникли проблемы с отправкой формы, <a href="mailto:support@example.com">свяжитесь с нами</a>.</p>
-    </div>
-  </div>
+<script>
+    document.getElementById('contactForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Отменяем стандартное поведение формы
 
-  <script>
-    document.getElementById('wishForm').addEventListener('submit', function(event) {
-      event.preventDefault();
+        const formData = new FormData(this);
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
 
-      const name = document.getElementById('name').value;
-      const week = document.getElementById('week').value;
-      const shift = document.getElementById('shift').value;
-      const reason = document.getElementById('reason').value;
+        // Скрыть все сообщения об ошибках
+        errorMessage.style.display = 'none';
+        successMessage.style.display = 'none';
 
-      const formData = {
-        'name': name,
-        'week': week,
-        'shift': shift,
-        'reason': reason
-      };
-
-      fetch('https://script.google.com/macros/s/AKfycby0CuAV1sDGkzBq2j9DPxJaqgejvSQwGZPmtS1PQa__FQA6MxwvK5uurIc5V8ytBgk/exec', {
-        method: 'POST',
-        body: new URLSearchParams(formData),
-      })
-      .then(response => response.json())
-      .then(data => {
-        document.getElementById('responseMessage').style.display = 'block';
-        document.getElementById('wishForm').reset(); // Очистить форму после отправки
-      })
-      .catch(error => {
-        console.error('Ошибка:', error);
-        alert('Произошла ошибка. Пожалуйста, попробуйте еще раз.');
-      });
+        // Сделать запрос к Google Apps Script
+        fetch('https://script.google.com/macros/s/AKfycbwRuMOnnBEtYO5Cm57C-iACJOPxW4sCKLmxWPqlYZbtHWCmQBermxA2iNL9eC95anhe/exec', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                successMessage.style.display = 'block';
+                document.getElementById('contactForm').reset(); // Сброс формы
+            } else {
+                errorMessage.style.display = 'block';
+            }
+        })
+        .catch(error => {
+            errorMessage.style.display = 'block';
+            console.error('Ошибка:', error);
+        });
     });
-  </script>
+</script>
 
 </body>
 </html>
