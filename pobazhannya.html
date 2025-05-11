@@ -3,128 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Форма Отправки</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 30px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        input, textarea {
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        .error {
-            color: red;
-            font-size: 14px;
-            display: none;
-        }
-
-        .success {
-            color: green;
-            font-size: 14px;
-            display: none;
-        }
-    </style>
+    <title>Форма</title>
 </head>
 <body>
-
-<div class="container">
-    <h1>Форма Отправки</h1>
+    <h2>Форма обратной связи</h2>
     <form id="contactForm">
         <label for="name">Ваше имя:</label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="name" name="name" required><br><br>
 
         <label for="email">Ваш email:</label>
-        <input type="email" id="email" name="email" required>
+        <input type="email" id="email" name="email" required><br><br>
 
-        <label for="message">Сообщение:</label>
-        <textarea id="message" name="message" rows="4" required></textarea>
+        <label for="message">Сообщение:</label><br>
+        <textarea id="message" name="message" rows="4" cols="50" required></textarea><br><br>
 
         <button type="submit">Отправить</button>
     </form>
 
-    <div class="error" id="errorMessage">Ошибка при отправке формы. Пожалуйста, попробуйте позже.</div>
-    <div class="success" id="successMessage">Форма успешно отправлена!</div>
-</div>
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
 
-<script>
-    document.getElementById('contactForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Отменяем стандартное поведение формы
+            const formData = new FormData(this);
 
-        const formData = new FormData(this);
-        const errorMessage = document.getElementById('errorMessage');
-        const successMessage = document.getElementById('successMessage');
+            // Создаем объект с данными формы
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                message: formData.get('message')
+            };
 
-        // Скрыть все сообщения об ошибках
-        errorMessage.style.display = 'none';
-        successMessage.style.display = 'none';
-
-        // Сделать запрос к Google Apps Script
-        fetch('https://script.google.com/macros/s/AKfycbwRuMOnnBEtYO5Cm57C-iACJOPxW4sCKLmxWPqlYZbtHWCmQBermxA2iNL9eC95anhe/exec', {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                successMessage.style.display = 'block';
-                document.getElementById('contactForm').reset(); // Сброс формы
-            } else {
-                errorMessage.style.display = 'block';
-            }
-        })
-        .catch(error => {
-            errorMessage.style.display = 'block';
-            console.error('Ошибка:', error);
+            // Отправляем запрос
+            fetch('https://script.google.com/macros/s/AKfycbxWGfyj3T8Lw7To5bWOZDpEkAe5t0WOzrcRrJTm3D6aTk5iX_mryPRWhwdllMIp-h5l/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*' // Добавляем заголовок для CORS
+                },
+                body: JSON.stringify(data) // Преобразуем данные в JSON
+            })
+            .then(response => response.json()) // Преобразуем ответ в JSON
+            .then(data => {
+                alert('Сообщение отправлено!');
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Произошла ошибка при отправке сообщения.');
+            });
         });
-    });
-</script>
-
+    </script>
 </body>
 </html>
